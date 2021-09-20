@@ -1,0 +1,56 @@
+<?php if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
+include_once('fix_mysql.inc.php');
+mysql_connect("localhost","root","");
+mysql_select_db("ecommerce");$x="";
+function register(){
+   $nom=$_POST['nom'];
+	$prenom=$_POST['prenom'];
+	$email=$_POST['email'];
+	$mdp=$_POST['mdp'];
+	$phone=$_POST['phone'];
+	$datenaissance=$_POST['datenaissance'];
+	$adresse=$_POST['adresse'];
+	$ville=$_POST['region'];
+	$postalcode=$_POST['postalcode'];
+$query = "SELECT * FROM `client` WHERE `email` = '$email'";
+$sqlsearch = mysql_query($query);
+$resultcount = mysql_numrows($sqlsearch);
+
+if($resultcount > 0){
+  $x=  "this email is already registred" ;
+}else{
+    mysql_query(
+      "INSERT INTO client (nom,prenom,email,mdp,phone,adresse,ville,postalcode,datenaissance) VALUES('$nom','$prenom','$email','$mdp','$phone','$adresse','$ville','$postalcode','$datenaissance')") or die(mysql_error());
+$x= "your account has been created. activate it with your email.";}    echo json_encode($x);
+}
+if(isset($_POST['registerbutton'])){
+register();}
+	
+function login(){
+  
+	$email=$_POST['email'];
+	$mdp=$_POST['mdp'];
+	
+$query = "SELECT nom FROM `client` WHERE `email` = '$email'";
+$query1 = "SELECT prenom FROM `client` WHERE `mdp` = '$mdp'";
+$sqlsearch = mysql_query($query);
+$resultcount = mysql_numrows($sqlsearch);
+$sqlsearch1 = mysql_query($query1);
+$resultcount1 = mysql_numrows($sqlsearch1);
+
+if($resultcount > 0 && $resultcount1>0){
+	$row=mysql_fetch_array($sqlsearch, MYSQL_ASSOC);
+  $_SESSION["nom"]=$row['nom'];
+  $_SESSION["mdp"]=$mdp;
+	$_SESSION['is_connected']=1;
+}else{
+    
+$x= "wrong info";}   
+}
+if(isset($_POST['registerbutton'])){
+register();}
+		if(isset($_POST['loginbutton'])){
+login();}
+  ?>
