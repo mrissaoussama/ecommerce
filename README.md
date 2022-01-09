@@ -1,1 +1,1 @@
-# ecommerce website written with php for homework assignment 
+# ecommerce website written with php 
