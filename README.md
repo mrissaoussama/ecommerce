@@ -1,1 +1,1 @@
-# ecommerce website written with php 
+an ecommerce website written with php written for a university project
